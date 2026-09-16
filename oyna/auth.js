@@ -74,7 +74,7 @@ const style = document.createElement("style");
 style.textContent = `
 /* Düğme GİRİŞ EKRANINDA, ortada ve büyük durur (kullanıcı, 16 Eyl 2026: "köşede hiç belli
    olmuyor"). Oyun başlayınca gizlenir: oynarken ekranı kapatmasın. */
-#my-account{position:fixed;left:50%;transform:translateX(-50%);bottom:6%;z-index:30;border:0;
+#my-account{position:fixed;left:50%;transform:translateX(-50%);bottom:6%;z-index:40;border:0;
   border-radius:26px;padding:12px 20px;max-width:86vw;display:flex;align-items:center;gap:10px;
   font:600 16px/1.2 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
   color:#3c4043;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.35);cursor:pointer;}
@@ -91,12 +91,23 @@ const G_SVG = '<svg viewBox="0 0 48 48" aria-hidden="true">' +
   '<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>' +
   '</svg>';
 
-// Godot, giriş ekranı açıldığında/kapandığında bunu çağırır (JavaScriptBridge).
-let onIntro = true;
-window.MY_showAccount = (v) => { onIntro = !!v; updateButton(); };
+// Godot köprüsü: düğme yalnız HESAP PANELİ açıkken ve onun içinde çizilen yuvada görünür
+// (kullanıcı, 16 Eyl 2026: "tek box üzerinden giriş yapılabilsin, üstte ad olsun"). Konum
+// oran olarak gelir (0-1), böylece canvas ölçeğinden bağımsızdır.
+let shown = false;   // panel kapalıyken düğme hiç görünmez
+window.MY_showAccount = (v) => { shown = !!v; updateButton(); };
+window.MY_placeAccount = (l, t, w, h) => {
+  btn.style.left = (l * 100) + "%";
+  btn.style.top = (t * 100) + "%";
+  btn.style.width = (w * 100) + "%";
+  btn.style.height = (h * 100) + "%";
+  btn.style.bottom = "auto";
+  btn.style.transform = "none";
+  btn.style.justifyContent = "center";
+};
 
 function updateButton() {
-  if (!MY.ready || !onIntro) {
+  if (!MY.ready || !shown) {
     btn.hidden = true;
     return;
   }
