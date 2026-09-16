@@ -72,15 +72,22 @@ document.addEventListener("DOMContentLoaded", () => document.body.appendChild(bt
 
 const style = document.createElement("style");
 style.textContent = `
-#my-account{position:fixed;right:10px;bottom:10px;z-index:30;border:0;border-radius:18px;
-  padding:9px 14px;font:600 13px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  color:#2b3444;background:rgba(255,250,240,.92);box-shadow:0 2px 10px rgba(0,0,0,.25);}
+/* Düğme GİRİŞ EKRANINDA, ortada ve büyük durur (kullanıcı, 16 Eyl 2026: "köşede hiç belli
+   olmuyor"). Oyun başlayınca gizlenir: oynarken ekranı kapatmasın. */
+#my-account{position:fixed;left:50%;transform:translateX(-50%);bottom:6%;z-index:30;border:0;
+  border-radius:26px;padding:14px 22px;max-width:86vw;
+  font:600 16px/1 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  color:#2b3444;background:rgba(255,250,240,.95);box-shadow:0 4px 18px rgba(0,0,0,.35);}
 #my-account[hidden]{display:none !important;}
 #my-account.bagli{background:rgba(123,182,98,.92);color:#fffaf0;}`;
 document.head.appendChild(style);
 
+// Godot, giriş ekranı açıldığında/kapandığında bunu çağırır (JavaScriptBridge).
+let onIntro = true;
+window.MY_showAccount = (v) => { onIntro = !!v; updateButton(); };
+
 function updateButton() {
-  if (!MY.ready) {
+  if (!MY.ready || !onIntro) {
     btn.hidden = true;
     return;
   }
