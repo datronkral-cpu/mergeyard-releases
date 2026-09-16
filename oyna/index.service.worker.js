@@ -4,7 +4,7 @@
 // Incrementing CACHE_VERSION will kick off the install event and force
 // previously cached resources to be updated from the network.
 /** @type {string} */
-const CACHE_VERSION = '1789579343|5315171';
+const CACHE_VERSION = '1789583405|5401206';
 /** @type {string} */
 const CACHE_PREFIX = 'MergeYard-sw-cache-';
 const CACHE_NAME = CACHE_PREFIX + CACHE_VERSION;
